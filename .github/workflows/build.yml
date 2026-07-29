@@ -24,6 +24,13 @@ jobs:
           pip3 install --upgrade pip
           pip3 install buildozer cython
 
+      - name: پذیرش مجوزهای اندروید (قبل از ساخت)
+        run: |
+          # buildozer را یک بار با دستور dummy اجرا می‌کنیم تا sdkmanager نصب شود
+          buildozer android debug || true
+          # حالا با دستور yes تمام مجوزها را می‌پذیریم
+          yes | ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses
+
       - name: ساخت APK با Buildozer
         run: |
           buildozer android debug
