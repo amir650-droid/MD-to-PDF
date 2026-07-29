@@ -12,14 +12,17 @@ package.domain = org.example
 # کتابخانه‌های مورد نیاز (خیلی مهم!)
 requirements = python3,kivy,markdown,weasyprint
 
-# نسخه‌ی اندروید
+# مسیر پوشه‌ی کد منبع (همان پوشه‌ی فعلی)
+source.dir = .
+
+# تنظیمات اندروید
 android.api = 31
 android.minapi = 21
 
-# مجوزهای لازم برای دسترسی به حافظه و اینترنت
+# مجوزهای لازم
 android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
 
-# تنظیمات پیش‌فرض (نیازی به تغییر ندارند)
+# تنظیمات پیش‌فرض
 source.include_exts = py,png,jpg,kv,atlas
 version = 0.1
 orientation = portrait
