@@ -1,4 +1,4 @@
-name: ساخت APK
+name: ساخت APK با Docker
 
 on:
   push:
@@ -11,29 +11,13 @@ jobs:
       - name: دریافت کدها
         uses: actions/checkout@v3
 
-      - name: نصب Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: نصب Buildozer و وابستگی‌ها
+      - name: ساخت APK با Buildozer در Docker
         run: |
-          sudo apt update
-          sudo apt install -y git zip unzip python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev
-          pip3 install --upgrade pip
-          pip3 install buildozer cython
-
-      - name: پذیرش مجوزهای اندروید (قبل از ساخت)
-        run: |
-          # buildozer را یک بار با دستور dummy اجرا می‌کنیم تا sdkmanager نصب شود
-          buildozer android debug || true
-          # حالا با دستور yes تمام مجوزها را می‌پذیریم
-          yes | ~/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses
-
-      - name: ساخت APK با Buildozer
-        run: |
-          buildozer android debug
+          docker run --rm \
+            -v $PWD:/home/user/hostapp \
+            -w /home/user/hostapp \
+            kivy/buildozer \
+            buildozer android debug
 
       - name: آپلود APK
         uses: actions/upload-artifact@v4
