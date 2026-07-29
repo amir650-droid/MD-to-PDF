@@ -17,7 +17,7 @@ jobs:
             -v $PWD:/home/user/hostapp \
             -w /home/user/hostapp \
             kivy/buildozer \
-            buildozer -y android debug
+            sh -c "yes | buildozer android debug"
 
       - name: آپلود APK
         uses: actions/upload-artifact@v4
