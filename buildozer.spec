@@ -1,25 +1,28 @@
-name: ساخت APK
+[app]
 
-on:
-  push:
-  workflow_dispatch:
+# نام برنامه (همانطور که روی گوشی نمایش داده می‌شود)
+title = تبدیل مارک‌داون به پی‌دی‌اف
 
-jobs:
-  build-android:
-    runs-on: ubuntu-latest
-    steps:
-      - name: گرفتن کدها
-        uses: actions/checkout@v3
+# نام داخلی (فقط حروف کوچک، اعداد و زیرخط)
+package.name = mypdfapp
 
-      - name: ساخت با Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          command: buildozer android debug
-          workdir: .
+# دامنه (برعکس نوشته می‌شود)
+package.domain = org.example
 
-      - name: آپلود APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: my-pdf-app
-          path: bin/*.apk
+# کتابخانه‌های مورد نیاز (خیلی مهم!)
+requirements = python3,kivy,markdown,weasyprint
+
+# نسخه‌ی اندروید
+android.api = 31
+android.minapi = 21
+
+# مجوزهای لازم برای دسترسی به حافظه و اینترنت
+android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
+
+# تنظیمات پیش‌فرض (نیازی به تغییر ندارند)
+source.include_exts = py,png,jpg,kv,atlas
+version = 0.1
+orientation = portrait
+osx.python_version = 3
+osx.kivy_version = 2.1.0
+fullscreen = 0
