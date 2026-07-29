@@ -1,5 +1,5 @@
 #!/usr/bin/expect -f
 set timeout -1
 spawn /home/user/.venv/bin/buildozer {*}$argv
-expect -re "Are you sure you want to continue \\\[y/n\\\]\\? " { send "y\r" }
-interact
+expect {Are you sure you want to continue [y/n]? } { send "y\r" }
+expect eof
