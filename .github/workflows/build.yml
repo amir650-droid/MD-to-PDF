@@ -16,9 +16,8 @@ jobs:
           docker run --rm \
             -v $PWD:/home/user/hostapp \
             -w /home/user/hostapp \
-            -e BUILDOZER_ROOT_CONTINUE=1 \
             kivy/buildozer \
-            buildozer android debug
+            buildozer -y android debug
 
       - name: آپلود APK
         uses: actions/upload-artifact@v4
