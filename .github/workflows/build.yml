@@ -1,4 +1,4 @@
-name: ساخت APK با Docker (پچ شده)
+name: ساخت APK با Docker (expect)
 
 on:
   push:
@@ -12,16 +12,14 @@ jobs:
         uses: actions/checkout@v3
 
       - name: ساخت ایمیج سفارشی
-        run: |
-          docker build -t my-buildozer .
+        run: docker build -t my-buildozer .
 
-      - name: ساخت APK با Buildozer
+      - name: ساخت APK
         run: |
           docker run --rm \
             -v $PWD:/home/user/hostapp \
             -w /home/user/hostapp \
-            my-buildozer \
-            buildozer android debug
+            my-buildozer android debug
 
       - name: آپلود APK
         uses: actions/upload-artifact@v4
