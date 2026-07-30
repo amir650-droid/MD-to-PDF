@@ -7,7 +7,7 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
-    timeout-minutes: 60  # جلوگیری از توقف ۶ ساعته
+    timeout-minutes: 90  # جلوگیری از توقف ۶ ساعته
 
     steps:
       - name: دریافت کدها
