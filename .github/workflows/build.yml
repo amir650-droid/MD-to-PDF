@@ -1,4 +1,4 @@
-name: ساخت APK با Docker (expect)
+name: ساخت APK با Docker (با Cache)
 
 on:
   push:
@@ -7,13 +7,50 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
+    timeout-minutes: 60  # جلوگیری از توقف ۶ ساعته
+
     steps:
       - name: دریافت کدها
         uses: actions/checkout@v3
 
+      # ----------------------------------------------
+      # 1. کش کردن Docker layers (برای سرعت دانلود ایمیج)
+      # ----------------------------------------------
+      - name: تنظیم Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      # ----------------------------------------------
+      # 2. کش کردن Buildozer (برای جلوگیری از دانلود مجدد SDK/NDK)
+      # ----------------------------------------------
+      - name: Cache Buildozer global directory
+        uses: actions/cache@v3
+        with:
+          path: ~/.buildozer
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
+
+      - name: Cache Buildozer local directory
+        uses: actions/cache@v3
+        with:
+          path: .buildozer
+          key: buildozer-local-${{ runner.os }}-${{ hashFiles('buildozer.spec') }}
+
+      # ----------------------------------------------
+      # 3. ساخت ایمیج سفارشی با Expect (برای پاسخ به سوال root)
+      # ----------------------------------------------
       - name: ساخت ایمیج سفارشی
         run: docker build -t my-buildozer .
 
+      # ----------------------------------------------
+      # 4. ساخت APK
+      # ----------------------------------------------
       - name: ساخت APK
         run: |
           docker run --rm \
@@ -21,6 +58,9 @@ jobs:
             -w /home/user/hostapp \
             my-buildozer android debug
 
+      # ----------------------------------------------
+      # 5. آپلود APK
+      # ----------------------------------------------
       - name: آپلود APK
         uses: actions/upload-artifact@v4
         with:
